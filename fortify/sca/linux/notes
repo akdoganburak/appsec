@@ -1,0 +1,5 @@
+ #translate
+ docker run -v /root/build/:/build -v /root/apps/vapi:/src -it fortify-sca –b vapi -project-root /build -fcontainer /src
+ 
+ #scan
+ 
