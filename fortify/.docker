@@ -1,0 +1,2 @@
+echo $PAT | sudo docker login ghcr.io --username intrapus --password-stdin
+sudo docker push ghcr.io/intrapus/<name>

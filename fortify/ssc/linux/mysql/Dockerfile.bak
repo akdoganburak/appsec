@@ -1,0 +1,6 @@
+FROM mysql:8
+COPY ./my.cnf /etc/mysql/my.cnf
+COPY ./create-db.sql /tmp/create-db.sql
+COPY ./create-tables.sql /tmp/create-tables.sql
+RUN mysql --user="root" -p --password=$MYSQL_ROOT_PASSWORD --host="localhost" < "/tmp/create-db.sql"
+RUN mysql --user="root" -p --password=$MYSQL_ROOT_PASSWORD --database="ssc_db" --host="localhost" < "/tmp/create-tables.sql"

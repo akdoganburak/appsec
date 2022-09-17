@@ -1,0 +1,13 @@
+sudo docker build -t ssc_db .
+sudo docker run --name ssc_db01 -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 3306:3306 -d ssc_db
+
+#sql
+create database SSC_DB DEFAULT CHARACTER SET latin1 COLLATE latin1_general_cs;
+CREATE USER 'sscuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'SscUser@123';
+GRANT ALL PRIVILEGES ON *.* TO 'sscuser'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+mysql --user="root" -p --database="ssc_db" --host="localhost" < "/tmp/create-tables.sql"
+
+#jdbc
+jdbc:mysql://127.0.0.1:3306/ssc_db?connectionCollation=latin1_general_cs&rewriteBatchedStatements=true

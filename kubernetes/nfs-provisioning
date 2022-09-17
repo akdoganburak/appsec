@@ -1,0 +1,1 @@
+helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner  --set nfs.server=192.168.13.206  --set nfs.path=/export/volumes --set storageClass.defaultClass=true

@@ -1,0 +1,11 @@
+7z x Invicti_Enterprise_Scanner_Docker_Agent.tar
+docker load < InvictiEnterprise_Scan_Agent.tar
+
+docker run -d --name invicti-agent01 --restart=always
+-v /root/invicti/:/app/Logs/
+-e "ApiToken=Q39MJ4OXUfDfJLl8aeiKZaqJ0zkw/dJ/icqpSBDFnks="
+-e "ApiRootUrl=https://invicti.appsec.live/"
+-e "AgentName=docker-agent01"
+-e "IgnoreSslCertificateErrors=true"
+-e "NhsPort=8080"
+agent

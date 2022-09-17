@@ -1,0 +1,2 @@
+docker pull sonatype/nexus-iq-server
+docker run -d -p 8070:8070 -p 8071:8071 --name nexus-iq-server sonatype/nexus-iq-server

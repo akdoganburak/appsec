@@ -1,0 +1,22 @@
+name: fortify
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        required: false
+
+jobs:
+  fortify-sca:
+    runs-on: self-hosted
+    timeout-minutes: 10
+    steps:
+      - name: run scan script
+        run: |
+          ROOT_PATH="/root/apps"/${{ github.event.inputs.repo }} 
+          SCAN_SCRIPT_PATH=$ROOT_PATH/$(ls $ROOT_PATH | grep "sh$")
+          bash -x $SCAN_SCRIPT_PATH
+      - name: show results
+        run: |
+          SCAN_PATH="/root/scans"
+          FPR_PATH=$SCAN_PATH/$(ls --sort=time $SCAN_PATH | grep ${{ github.event.inputs.repo }} | head -n1)
+          echo $FPR_PATH

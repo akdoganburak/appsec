@@ -1,0 +1,2 @@
+curl -u admin:Master00 'http://localhost:8070/api/v2/config?property=baseUrl&property=forceBaseUrl'
+curl -u admin:Master00 -X PUT -H "Content-Type: application/json" -d '{"baseUrl": "https://iq.intrapus.com", "forceBaseUrl": true}' http://localhost:8070/api/v2/config

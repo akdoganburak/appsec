@@ -1,0 +1,11 @@
+var input = document.querySelector('#customerNo');
+var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+nativeInputValueSetter.call(input, username);
+var ev2 = new Event('input', { bubbles: true});
+input.dispatchEvent(ev2);
+var input2 = document.querySelector('#password');
+var nativeInputValueSetter2 = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+nativeInputValueSetter2.call(input2, password);
+var ev3 = new Event('input', { bubbles: true});
+input2.dispatchEvent(ev3);
+netsparker.auth.clickByQuery('#panel-action-button', 2000);

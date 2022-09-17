@@ -1,0 +1,3 @@
+sudo docker build -t ssc_webapp .
+sudo docker run --name ssc_webapp01 -d -p 8080:8080 ssc_webapp
+sudo docker exec ssc_webapp01 cat /root/.fortify/ssc/init.token
