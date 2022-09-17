@@ -1,5 +1,7 @@
- #translate
- docker run -v /root/build/:/build -v /root/apps/vapi:/src -it fortify-sca –b vapi -project-root /build -fcontainer /src
- 
- #scan
+#translate
+docker run -v /root/.fortify/:/build -v /root/apps/rosariosis/:/src -it fortify-sca –b rosariosis -project-root /build -fcontainer /src 
+docker run -v /root/.fortify/:/build -it fortify-sca -project-root /build --show-build-ids
+
+#scan
+docker run -v /root/.fortify/:/build -it fortify-sca -b rosariosis -project-root /build -scan -fcontainer -f /build/result.fpr
  
