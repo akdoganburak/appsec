@@ -10,3 +10,13 @@ mvn clean install
 
 #fortify plugin location
 C:\Users\Administrator\.m2\repository\com\fortify\sca\plugins\maven\sca-maven-plugin
+
+#fortify scan /w mvn
+mvn com.fortify.sca.plugins.maven:sca-maven-plugin:<ver>:clean
+mvn com.fortify.sca.plugins.maven:sca-maven-plugin:<ver>:translate
+
+#fortify scan /w sourceanalyzer
+sourceanalyzer -b MyProject -clean
+sourceanalyzer -b MyProject [<sca_options>] [<mvn_command_with_options>] (sourceanalyzer -b MyProject mvn package)
+sourceanalyzer -b MyProject [<sca_scan_options>] -scan -f MyResults.fpr
+
