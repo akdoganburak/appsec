@@ -14,6 +14,7 @@ C:\Users\Administrator\.m2\repository\com\fortify\sca\plugins\maven\sca-maven-pl
 #fortify scan /w mvn
 mvn com.fortify.sca.plugins.maven:sca-maven-plugin:<ver>:clean
 mvn com.fortify.sca.plugins.maven:sca-maven-plugin:<ver>:translate
+mvn com.fortify.sca.plugins.maven:sca-maven-plugin:<ver>:scan
 
 #fortify scan /w sourceanalyzer
 sourceanalyzer -b MyProject -clean
