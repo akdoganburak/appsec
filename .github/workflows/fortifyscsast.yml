@@ -1,12 +1,12 @@
 name: Fortify ScanCentral SAST Scan
 on:
   workflow_dispatch:
-  push:
+#  push:
     # Master or main branch that you want to trigger this workflow for
-    branches: [master]
-  pull_request:
+#    branches: [master]
+#  pull_request:
     # The branches below must be a subset of the branches above
-    branches: [master]
+#    branches: [master]
 
 jobs:                                                  
   Fortify-SAST:
