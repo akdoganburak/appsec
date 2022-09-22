@@ -1,0 +1,24 @@
+·         Closing all Injection type of attacks from Scan Policy > Security Checks such as SQLi, XSS, Command Injection, RCE, FLI, Header Injection, XXE, Expression Language Injection, RoR Code Execution, Code Evaluation.
+
+·         From Scan Policy > Brute Force > Disable
+
+·         From Scan Policy > Crawling > Add Related Links > Disable ( This option prevents Invicti to trim the found URL in order to generate new URL's )
+
+·         If needed to exclude some JS buttons, Scan Policy > Javascript > Exclude by CSS Selector should be used.
+
+·         Disable HAWK
+
+·         If any paramater in the website needed to be excluded please exclude from Scan Policy > Excluded Paramaters (https://www.invicti.com/support/excluding-parameters-from-scan/ )
+
+·         Disable POST request if needed from Scan Profile > Scope > Disallowed HTTP Methods.
+
+·         Disable Proof Generation from Scan Policy > Attacking > Enable Proof Generation.
+
+·         Lower the request speed from Scan Policy > Request.
+
+·         Enable Capturing Request from Scan Policy > Request > Capture HTTP Requests in order to debug if anything bad happens.
+
+·         Carefully check this documentation if any other exclusion of the part of the website needed : https://www.invicti.com/support/excluding-parts-website-from-scan/
+
+·         Enable Optimize Attacks on Recurring Parameters then set Recurring Parameters Attack Limit to 5 in order to prevent recurring attacks on paramaters.
+
