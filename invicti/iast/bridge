@@ -1,0 +1,5 @@
+#registry
+Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\InvictiIASTBridgeService\Parameters
+
+#parameter
+--port 7880 --log C:\bridge\appseclive.log --ssl-cert C:\bridge\cert.pem --ssl-key C:\bridge\privkey.pem
