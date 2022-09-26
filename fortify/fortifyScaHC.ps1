@@ -83,5 +83,4 @@ $results = [ordered]@{ScaVersion=Get-ScaVersion; `
 
 
 $results | ConvertTo-Json -Depth 2
-$results | ConvertTo-Json -Depth 2 | Out-File CW-FortifyHC.json
- 
+$results | ConvertTo-Json -Depth 2 | Out-File CW_SCA_HC_$(hostname).json 
