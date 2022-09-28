@@ -1,0 +1,6 @@
+#msbuild paths
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin
+C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin
+
+#old versions
+https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&rel=17
