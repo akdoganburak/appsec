@@ -10,7 +10,7 @@ param (
 
 function Get-ScaPath {
     try{
-        return  Split-Path $env:Path.split(";") | ?{$_ -like "*fortify*"}
+        return  Split-Path ($env:Path.split(";") | ?{$_ -like "*fortify*"})
         }
     catch{
         return 0
