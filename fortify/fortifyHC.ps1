@@ -10,12 +10,14 @@ param (
 
 function Get-ScaPath {
     try{
-        return  Split-Path ($env:Path.split(";") | ?{$_ -like "*fortify*"})
+        [string[]]$paths = Split-Path ($env:Path.split(";") | ?{$_ -like "*fortify*"})
+        return $paths[0]
         }
     catch{
         return 0
         }
-}
+} 
+
 
 function Get-ScaVersion {
     try{
