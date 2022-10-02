@@ -1,4 +1,6 @@
 # powershell "IEX(New-Object Net.WebClient).downloadString('https://raw.githubusercontent.com/intrapus/appsec/master/fortify/fortifyHC.ps1')" 
+# powershell "(New-Object Net.WebClient).downloadFile('https://raw.githubusercontent.com/intrapus/appsec/master/fortify/fortifyHC.ps1','fortifyHC.ps1');./fortifyHC.ps1 -mode sys,ssc"
+
 
 param (
     [String[]]$MODE,
@@ -95,6 +97,18 @@ function Get-SscLicense {
     }
 }
 
+function Get-TomcatInfo {
+    try {
+        $service = get-service | ?{$_.name -like "*tomcat*" -and $_.status -eq "running"} | select name,servicename,displayname
+        $process = get-process | ?{$_.processname -eq $service.servicename} | select name,path,id
+        $sockets = Get-NetTCPConnection -State Listen | ?{$_.owningprocess -eq $process.id} | select localaddress, localport, owningprocess
+        return [ordered]@{Service=$service; Process=$process; Sockets=$sockets}
+    }
+    catch{
+        return 0
+    }
+}
+
 
 $MODE = If ($MODE) {$MODE} Else {@('SCA','SYS')}
 $SCA_HOME = If ($SCA_HOME) {$SCA_HOME} Else {Get-ScaPath}
@@ -129,12 +143,13 @@ if ($MODE -contains "SSC"){
 
     $SYS_RES = [ordered]@{
         SscConfig=Get-SscConfig; `
-        SscLicense=Get-SscLicense
+        SscLicense=Get-SscLicense; `
+        TomcatInfo=Get-TomcatInfo
     }
 
     $RES += $SYS_RES
 }
 
 
-$JSON_RES = $RES | ConvertTo-Json -Depth 2
+$JSON_RES = $RES | ConvertTo-Json -Depth 3
 $JSON_RES | Out-File CW_FORTIFY_HC_$(hostname).json 
