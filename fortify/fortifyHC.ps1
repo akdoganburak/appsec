@@ -98,7 +98,7 @@ function Get-SscLicense {
 }
 
 function Get-TomcatInfo {
-    $service = get-service | ?{$_.name -like "*tomcat*" -and $_.status -eq "running"} | select name,servicename,displayname
+    $service = get-service | ?{$_.displayname -like "*tomcat*" -and $_.status -eq "running"} | select name,servicename,displayname
     $process = get-process | ?{$_.processname -eq $service.servicename} | select name,path,id
     $sockets = Get-NetTCPConnection -State Listen | ?{$_.owningprocess -eq $process.id} | select localaddress, localport, owningprocess
     try {
