@@ -1,5 +1,5 @@
-# appsec
+### APPSEC
 • SAST
 • DAST
 • SCA
-• Devsecops
+• DSO
