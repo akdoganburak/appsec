@@ -1,0 +1,15 @@
+#search repos
+helm search repo sonatype/nexus-repository-manager --versions
+
+#install specific version
+helm install nexus-rm -n nexus -f myvalues.yaml sonatype/nexus-repository-manager --version 39.0.0 
+helm ls -A
+
+#upgrade
+helm upgrade nexus-rm sonatype/nexus-repository-manager --version 40.0.0
+
+#port-forwarding
+kubectl port-forward service/nexus-rm-nexus-repository-manager 80:8081 --address='0.0.0.0' 
+
+
+#https://support.sonatype.com/hc/en-us/articles/7706583820691-How-to-install-Nexus-Pro-instance-using-Sonatype-helm3-chart
