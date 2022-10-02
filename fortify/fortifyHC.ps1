@@ -28,7 +28,7 @@ function Get-ScaVersion {
 
 function Get-ScaLicense {
     try{
-        [string[]]$license = (Get-Content $SCA_HOME"\fortify.license") | ?{$_ -notlike "#*"} | ?{$_ -notlike ""}
+        [string[]]$license = (Get-Content $SCA_HOME"\fortify.license") | ?{$_ -notlike "*metadata*"} | ?{$_ -like "* *"}
         return $license       
         }
     catch{
@@ -78,7 +78,7 @@ function Get-DiskInfo {
 function Get-SscConfig {
     try{
         [string[]]$app = (Get-Content $SSC_HOME"\ssc\conf\app.properties") | ?{$_ -notlike "#*"} | ?{$_ -notlike ""}
-        [string[]]$datasource = (Get-Content $SSC_HOME"\ssc\conf\datasource.properties") | ?{$_ -notlike "#*"} | ?{$_ -notlike ""}
+        [string[]]$datasource = (Get-Content $SSC_HOME"\ssc\conf\datasource.properties") | ?{$_ -notlike "#*"} | ?{$_ -notlike ""} | ?{$_ -notlike "*fp0*"}
         [string[]]$version = (Get-Content $SSC_HOME"\ssc\conf\version.properties") | ?{$_ -notlike "#*"} | ?{$_ -notlike ""}
         return [ordered]@{Version=$version; Datasource=$datasource; App=$app}      
         }
@@ -89,7 +89,7 @@ function Get-SscConfig {
 
 function Get-SscLicense {
     try{
-        [string[]]$license = (Get-Content $SSC_HOME"\fortify.license") | ?{$_ -notlike "#*"} | ?{$_ -notlike ""}
+        [string[]]$license = (Get-Content $SSC_HOME"\fortify.license") | ?{$_ -notlike "*metadata*"} | ?{$_ -like "* *"}
         return $license       
         }
     catch{
@@ -98,21 +98,20 @@ function Get-SscLicense {
 }
 
 function Get-TomcatInfo {
+    $service = get-service | ?{$_.name -like "*tomcat*" -and $_.status -eq "running"} | select name,servicename,displayname
+    $process = get-process | ?{$_.processname -eq $service.servicename} | select name,path,id
+    $sockets = Get-NetTCPConnection -State Listen | ?{$_.owningprocess -eq $process.id} | select localaddress, localport, owningprocess
     try {
-        $service = get-service | ?{$_.name -like "*tomcat*" -and $_.status -eq "running"} | select name,servicename,displayname
-        $process = get-process | ?{$_.processname -eq $service.servicename} | select name,path,id
-        $sockets = Get-NetTCPConnection -State Listen | ?{$_.owningprocess -eq $process.id} | select localaddress, localport, owningprocess
-        return [ordered]@{Service=$service; Process=$process; Sockets=$sockets}
+        $java_options = (Get-ItemProperty "HKLM:\SOFTWARE\WOW6432Node\Apache Software Foundation\Procrun 2.0\$($service.servicename)\Parameters\Java").options
+        return [ordered]@{Service=$service; Process=$process; Sockets=$sockets; JavaOptions=$java_options}
     }
     catch{
-        return 0
+        return [ordered]@{Service=$service; Process=$process; Sockets=$sockets; JavaOptions=""}
     }
 }
 
 
 $MODE = If ($MODE) {$MODE} Else {@('SCA','SYS')}
-$SCA_HOME = If ($SCA_HOME) {$SCA_HOME} Else {Get-ScaPath}
-$SSC_HOME = If ($SSC_HOME) {$SSC_HOME} Else {"C:\Fortify\home"}
 $RES = [ordered]@{}
 
 if ($MODE -contains "SYS"){
@@ -127,6 +126,7 @@ if ($MODE -contains "SYS"){
 
 if ($MODE -contains "SCA"){
 
+    $SCA_HOME = If ($SCA_HOME) {$SCA_HOME} Else {Get-ScaPath}
     $SCA_RES = [ordered]@{
         ScaVersion=Get-ScaVersion; `
         RuleVersion=Get-RuleVersion; `
@@ -141,10 +141,20 @@ if ($MODE -contains "SCA"){
 
 if ($MODE -contains "SSC"){
 
+    $TomcatInfo=Get-TomcatInfo
+
+    try{
+        $POSSIBLE_SSC_HOME = ($TomcatInfo.JavaOptions | ?{$_ -like "*fortify*"}).split('=')[-1]
+    }
+    catch{
+        $POSSIBLE_SSC_HOME = "C:\Fortify\home"
+    }
+
+    $SSC_HOME = If ($SSC_HOME) {$SSC_HOME} Else {$POSSIBLE_SSC_HOME}
     $SYS_RES = [ordered]@{
         SscConfig=Get-SscConfig; `
         SscLicense=Get-SscLicense; `
-        TomcatInfo=Get-TomcatInfo
+        TomcatInfo=$TomcatInfo
     }
 
     $RES += $SYS_RES
@@ -152,4 +162,4 @@ if ($MODE -contains "SSC"){
 
 
 $JSON_RES = $RES | ConvertTo-Json -Depth 3
-$JSON_RES | Out-File CW_FORTIFY_HC_$(hostname).json 
+$JSON_RES | Out-File CW_FORTIFY_HC_$(hostname)_$((Get-Date).ToUniversalTime().ToString("yyyy_MM_dd")).json 
