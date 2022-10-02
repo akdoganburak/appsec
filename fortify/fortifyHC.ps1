@@ -102,7 +102,7 @@ function Get-TomcatInfo {
     $process = get-process | ?{$_.processname -eq $service.servicename} | select name,path,id
     $sockets = Get-NetTCPConnection -State Listen | ?{$_.owningprocess -eq $process.id} | select localaddress, localport, owningprocess
     try {
-        $java_options = (Get-ItemProperty "HKLM:\SOFTWARE\WOW6432Node\Apache Software Foundation\Procrun 2.0\$($service.servicename)\Parameters\Java").options
+        $java_options = (Get-ItemProperty -ErrorAction Stop "HKLM:\SOFTWARE\WOW6432Node\Apache Software Foundation\Procrun 2.0\$($service.servicename)\Parameters\Java").options
         return [ordered]@{Service=$service; Process=$process; Sockets=$sockets; JavaOptions=$java_options}
     }
     catch{
