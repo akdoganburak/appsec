@@ -1,7 +1,11 @@
+#add repo
+helm repo add sonatype https://sonatype.github.io/helm3-charts/
+
 #search repos
 helm search repo sonatype/nexus-repository-manager --versions
 
 #install specific version
+helm install my-nexus-iq-server sonatype/nexus-iq-server --version 143.0.0 --set service.type="NodePort"
 helm install nexus-rm -n nexus -f myvalues.yaml sonatype/nexus-repository-manager --version 39.0.0 
 helm ls -A
 
