@@ -116,16 +116,6 @@ function Get-TomcatInfo {
 $MODE = If ($MODE) {$MODE} Else {@('SCA','SYS')}
 $RES = [ordered]@{}
 
-if ($MODE -contains "SYS"){
-
-    $SYS_RES = [ordered]@{
-        DiskInfo=Get-DiskInfo; `
-        SystemInfo=Get-SystemInfo
-    }
-
-    $RES += $SYS_RES
-}
-
 if ($MODE -contains "SCA"){
 
     $SCA_HOME = If ($SCA_HOME) {$SCA_HOME} Else {Get-ScaPath}
@@ -153,10 +143,20 @@ if ($MODE -contains "SSC"){
     }
 
     $SSC_HOME = If ($SSC_HOME) {$SSC_HOME} Else {$POSSIBLE_SSC_HOME}
-    $SYS_RES = [ordered]@{
+    $SSC_RES = [ordered]@{
         SscConfig=Get-SscConfig; `
         SscLicense=Get-SscLicense; `
         TomcatInfo=$TomcatInfo
+    }
+
+    $RES += $SSC_RES
+}
+
+if ($MODE -contains "SYS"){
+
+    $SYS_RES = [ordered]@{
+        DiskInfo=Get-DiskInfo; `
+        SystemInfo=Get-SystemInfo
     }
 
     $RES += $SYS_RES
