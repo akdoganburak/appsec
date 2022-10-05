@@ -136,7 +136,7 @@ if ($MODE -contains "SSC"){
     $TomcatInfo=Get-TomcatInfo
 
     try{
-        $POSSIBLE_SSC_HOME = ($TomcatInfo.JavaOptions | ?{$_ -like "*fortify*"}).split('=')[-1]
+        $POSSIBLE_SSC_HOME = ($TomcatInfo.JavaOptions | ?{$_ -like "*fortify\.home*"}).split('=')[-1]
     }
     catch{
         $POSSIBLE_SSC_HOME = "C:\Windows\ServiceProfiles\LocalService\.fortify"
