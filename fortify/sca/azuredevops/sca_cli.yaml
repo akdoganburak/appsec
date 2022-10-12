@@ -1,0 +1,25 @@
+trigger:
+  none
+
+pool:
+  web_tesisat
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  
+steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'whoami; ls'
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      Call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat"
+      sourceanalyzer.exe -b richo -clean
+      sourceanalyzer.exe -b richo devenv RichesDotnetApp.sln /REBUILD
+      sourceanalyzer.exe -b richo -scan -f C:\Windows\Temp\richo.fpr
+      Call fortifyclient.bat uploadFPR -url http://192.168.13.207:8080/ssc -authtoken bab84f36-6060-4624-af58-614add737b43 -f C:\Windows\Temp\richo.fpr -application "riches.net" -applicationVersion "prod"
